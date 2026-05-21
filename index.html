@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRV 壓力自測指南 — 練息場</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{--jte-blue:#003D7C;--jte-blue-soft:#A8C9EE;--jte-blue-deep:#002850;--jte-bg:#FFFFFF;--jte-bg-gray:#F2F4F7;--jte-green:#4CAF19;--jte-orange:#FF8A00;--jte-text:#0A1929;--jte-text-2:#4A5A6E;--jte-text-3:#8A95A5;--jte-border:rgba(0,61,124,.09);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Inter','Noto Sans TC',-apple-system,sans-serif;background:#DDE2E9;-webkit-font-smoothing:antialiased;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 20px;}
+  .a4{width:min(794px,100%);background:var(--jte-bg);position:relative;overflow:hidden;padding:42px 58px 36px;box-shadow:0 12px 56px rgba(0,0,0,.16);}
+  .blob{position:absolute;filter:blur(56px);pointer-events:none;border-radius:50%;}
+  .logo-text-block{display:flex;flex-direction:column;gap:2px;}
+  .logo-zh{font-size:16px;font-weight:700;color:var(--jte-blue);letter-spacing:.1em;}
+  .logo-en{font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--jte-text-3);}
+  .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;position:relative;z-index:1;}
+  .tag{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--jte-text-3);padding:6px 14px;border:1px solid var(--jte-border);border-radius:20px;}
+  .hero{margin-bottom:30px;position:relative;z-index:1;}
+  .hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--jte-blue);opacity:.65;margin-bottom:8px;}
+  .hero-title{font-size:44px;font-weight:300;color:var(--jte-text);letter-spacing:-.035em;line-height:1.05;}
+  .hero-title strong{font-weight:700;color:var(--jte-blue);}
+  .divider{width:40px;height:3px;background:var(--jte-blue);border-radius:2px;margin:12px 0;}
+  .hero-sub{font-size:13px;color:var(--jte-text-3);line-height:1.6;}
+  .hero-sub .qr-note{display:block;margin-top:5px;font-size:12px;color:var(--jte-blue);opacity:.7;letter-spacing:.02em;}
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:relative;z-index:1;margin-bottom:14px;}
+  .step-card{background:var(--jte-bg-gray);border-radius:18px;padding:20px 20px 18px;border:1px solid transparent;position:relative;overflow:hidden;}
+  .step-card.b{border-color:rgba(0,61,124,.12);}
+  .step-card.g{border-color:rgba(76,175,25,.2);}
+  .step-card.qr-bottom{display:flex;flex-direction:column;}
+  .step-card.qr-bottom .step-content{flex:1;}
+  .wm{position:absolute;bottom:-6px;right:10px;font-size:72px;font-weight:800;line-height:1;letter-spacing:-.04em;color:var(--jte-blue);opacity:.07;pointer-events:none;user-select:none;}
+  .step-card.g .wm{color:var(--jte-green);}
+  .step-num-label{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--jte-text-3);margin-bottom:10px;}
+  .step-head{display:flex;align-items:center;gap:11px;margin-bottom:9px;}
+  .s-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .ib{background:rgba(0,61,124,.1);}.ig{background:rgba(76,175,25,.12);}.io{background:rgba(255,138,0,.12);}
+  .step-title{font-size:16px;font-weight:700;color:var(--jte-text);letter-spacing:-.01em;line-height:1.25;}
+  .step-desc{font-size:12px;color:var(--jte-text-2);line-height:1.6;margin-bottom:12px;}
+  .step-desc strong{color:var(--jte-text);font-weight:600;}
+  .qr-row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;}
+  .qr-item{display:flex;flex-direction:column;align-items:center;gap:5px;}
+  .qr-box{background:white;border-radius:11px;display:flex;align-items:center;justify-content:center;border:1px solid var(--jte-border);overflow:hidden;padding:4px;cursor:pointer;transition:box-shadow .18s,transform .14s;}
+  .qr-box:hover{box-shadow:0 4px 16px rgba(0,61,124,.2);transform:translateY(-2px);}
+  .qr-md{width:90px;height:90px;}.qr-md canvas,.qr-md img{width:82px!important;height:82px!important;}
+  .qr-label{font-size:10px;font-weight:600;color:var(--jte-text-3);letter-spacing:.07em;text-transform:uppercase;text-align:center;}
+  .qr-label.green{color:var(--jte-green);}
+  .hint{display:flex;align-items:flex-start;gap:8px;background:white;border-radius:10px;padding:10px 12px;border:1px solid var(--jte-border);}
+  .hint-icon{width:26px;height:26px;border-radius:7px;background:rgba(0,61,124,.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .hint-text{font-size:11px;color:var(--jte-text-2);line-height:1.5;}
+  .hint-text strong{color:var(--jte-text);font-weight:600;}
+  .tip{background:linear-gradient(135deg,#003D7C 0%,#005BAA 100%);border-radius:14px;padding:16px 20px;color:white;position:relative;z-index:1;margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+  .tip-eyebrow{font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.6;margin-bottom:3px;}
+  .tip-title{font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.35;}
+  .tip-sub{font-size:11px;opacity:.7;margin-top:3px;line-height:1.5;}
+  .footer{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--jte-border);position:relative;z-index:1;}
+  .footer-text{font-size:11px;color:var(--jte-text-3);letter-spacing:.04em;line-height:1.8;text-align:right;}
+
+  @media(max-width:600px){.steps{grid-template-columns:1fr;}.a4{padding:32px 24px 28px;}}
+</style>
+</head>
+<body>
+<div class="a4">
+  <div class="blob" style="top:-100px;right:-80px;width:280px;height:280px;background:rgba(168,201,238,.2);"></div>
+  <div class="blob" style="bottom:60px;left:-60px;width:200px;height:200px;background:rgba(76,175,25,.09);"></div>
+  <div style="position:absolute;top:155px;right:46px;width:6px;height:6px;border-radius:50%;background:#003D7C;opacity:.22;z-index:0;"></div>
+  <div style="position:absolute;top:170px;right:58px;width:4px;height:4px;border-radius:50%;background:#A8C9EE;opacity:.5;z-index:0;"></div>
+  <div style="position:absolute;bottom:160px;left:48px;width:5px;height:5px;border-radius:50%;background:#4CAF19;opacity:.35;z-index:0;"></div>
+  <svg style="position:absolute;top:38px;right:60px;width:62px;height:62px;opacity:.1;z-index:0;" viewBox="0 0 62 62"><circle cx="31" cy="31" r="28" fill="none" stroke="#003D7C" stroke-width="2"/><circle cx="31" cy="31" r="16" fill="#003D7C"/></svg>
+  <svg style="position:absolute;bottom:120px;right:62px;width:32px;height:32px;opacity:.16;z-index:0;" viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" rx="7" fill="#4CAF19"/></svg>
+
+  <div class="header">
+    <div class="logo-text-block">
+      <div class="logo-zh">練息場</div>
+      <div class="logo-en">Join to Enjoy</div>
+    </div>
+    <div class="tag">WELLNESS TOOL GUIDE</div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-eyebrow">HRV 壓力自測 · 三分鐘完成</div>
+    <div class="hero-title">覺察壓力<br><strong>立刻舒緩</strong></div>
+    <div class="divider"></div>
+    <div class="hero-sub">
+      <span>用科學數據了解你的身體狀態，搭配呼吸練習快速恢復平衡</span>
+      <span class="qr-note">＊以下 QRCode 處可直接點選進入網頁</span>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step-card b">
+      <div class="wm">1</div>
+      <div class="step-num-label">STEP 01</div>
+      <div class="step-head">
+        <div class="s-icon ib"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#003D7C" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="3"/><circle cx="12" cy="16" r="1.5" fill="#003D7C"/><path d="M9 6h6"/></svg></div>
+        <div class="step-title">下載 iDestressor App</div>
+      </div>
+      <div class="step-desc">免費下載 HRV 量測 App</div>
+      <div class="qr-row">
+        <div class="qr-item"><div class="qr-box qr-md" id="qr-ios"></div><div class="qr-label">App Store</div></div>
+        <div class="qr-item"><div class="qr-box qr-md" id="qr-android"></div><div class="qr-label">Google Play</div></div>
+      </div>
+    </div>
+
+    <div class="step-card">
+      <div class="wm">2</div>
+      <div class="step-num-label">STEP 02</div>
+      <div class="step-head">
+        <div class="s-icon io"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FF8A00" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="11" r="3"/><path d="M12 14v3M9 20h6"/></svg></div>
+        <div class="step-title">量測並截圖結果</div>
+      </div>
+      <div class="step-desc">感測器夾耳垂，坐著靜心量測 <strong>3 分鐘</strong>，完成後截圖畫面</div>
+      <div class="hint">
+        <div class="hint-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#003D7C" stroke-width="2" stroke-linecap="round"><path d="M3 9V5a2 2 0 012-2h4M21 9V5a2 2 0 00-2-2h-4M3 15v4a2 2 0 002 2h4M21 15v4a2 2 0 01-2 2h-4"/></svg></div>
+        <div class="hint-text"><strong>截圖方式</strong><br>iOS：音量+ 電源 &nbsp;│&nbsp; Android：電源 + 音量下</div>
+      </div>
+    </div>
+
+    <div class="step-card b qr-bottom">
+      <div class="wm">3</div>
+      <div class="step-content">
+        <div class="step-num-label">STEP 03</div>
+        <div class="step-head">
+          <div class="s-icon ib"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#003D7C" stroke-width="1.8" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <div class="step-title">上傳截圖取得報告</div>
+        </div>
+        <div class="step-desc">上傳截圖，取得<strong>個人壓力狀態分析報告</strong></div>
+      </div>
+      <div class="qr-row">
+        <div class="qr-item"><div class="qr-box qr-md" id="qr-report"></div><div class="qr-label">上傳截圖 · 取得報告</div></div>
+      </div>
+    </div>
+
+    <div class="step-card g qr-bottom">
+      <div class="wm">4</div>
+      <div class="step-content">
+        <div class="step-num-label">STEP 04</div>
+        <div class="step-head">
+          <div class="s-icon ig"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#4CAF19" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12a4 4 0 008 0"/><line x1="12" y1="8" x2="12" y2="12"/></svg></div>
+          <div class="step-title">呼吸練習</div>
+        </div>
+        <div class="step-desc">進入小憩練息可優先選擇『諧振呼吸』</div>
+      </div>
+      <div class="qr-row">
+        <div class="qr-item"><div class="qr-box qr-md" id="qr-breathing"></div><div class="qr-label green">小憩練息 · 呼吸練習</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" style="flex-shrink:0;opacity:.75;"><circle cx="15" cy="15" r="13" fill="rgba(255,255,255,.15)"/><path d="M15 8v8M15 20v2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+    <div>
+      <div class="tip-eyebrow">科學驗證</div>
+      <div class="tip-title">呼吸練習後再測，壓力通常會明顯降低</div>
+      <div class="tip-sub">人一天呼吸 2 萬次，好好呼吸是最快自我療癒的絕佳方法，請多加練習！</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="logo-text-block">
+      <div class="logo-zh" style="font-size:13px;">練息場</div>
+      <div class="logo-en" style="font-size:9px;">Join to Enjoy</div>
+    </div>
+    <div class="footer-text">科學，讓療癒更有據</div>
+  </div>
+</div>
+
+
+
+<script>
+var LINKS={ios:'https://apps.apple.com/us/app/idestressor/id1105741545',android:'https://play.google.com/store/apps/details?id=com.eureka.destressor&hl=zh_TW',report:'https://flow222git.github.io/hrvrecord/',breathing:'https://flow222git.github.io/jte-xiaoqi-2026/'};
+window.addEventListener('load',function(){
+  function makeQR(id,url,size){var el=document.getElementById(id);if(!el||!window.QRCode)return;new QRCode(el,{text:url,width:size,height:size,colorDark:"#003D7C",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M});el.style.cursor='pointer';el.addEventListener('click',function(){window.open(url,'_blank');});}
+  makeQR('qr-ios',LINKS.ios,82);makeQR('qr-android',LINKS.android,82);makeQR('qr-report',LINKS.report,82);makeQR('qr-breathing',LINKS.breathing,82);
+});
+
+</script>
+</body>
+</html>
